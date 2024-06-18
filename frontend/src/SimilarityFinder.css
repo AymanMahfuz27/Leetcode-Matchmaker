@@ -157,4 +157,28 @@ body {
   margin-bottom: 5px;
   color: #ffffff;
   font-size: 0.9em;
+
+}
+
+
+.load-more-button {
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  background-color: #3b82f6;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.load-more-button:hover {
+  background-color: #2563eb;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #e1e1e6;
 }

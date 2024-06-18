@@ -5,11 +5,15 @@ import './SimilarityFinder.css';
 const SimilarityFinder = () => {
   const [inputValue, setInputValue] = useState('');
   const [similarProblems, setSimilarProblems] = useState([]);
+  const [displayedProblems, setDisplayedProblems] = useState([]);
   const [error, setError] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const problemsPerPage = 10;
 
   useEffect(() => {
     if (similarProblems.length > 0) {
       document.body.style.paddingTop = '100px';
+      setDisplayedProblems(similarProblems.slice(0, problemsPerPage));
     } else {
       document.body.style.paddingTop = '0';
     }
@@ -24,6 +28,8 @@ const SimilarityFinder = () => {
       );
       setSimilarProblems(response.data);
       setError('');
+      setCurrentPage(1);
+      setDisplayedProblems(response.data.slice(0, problemsPerPage));
     } catch (error) {
       console.error('Error fetching similar problems', error);
       if (error.response) {
@@ -32,6 +38,7 @@ const SimilarityFinder = () => {
         setError('Error fetching similar problems');
       }
       setSimilarProblems([]);
+      setDisplayedProblems([]);
     }
   };
 
@@ -39,6 +46,13 @@ const SimilarityFinder = () => {
     if (event.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  const loadMore = () => {
+    const nextPage = currentPage + 1;
+    const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
+    setDisplayedProblems(newDisplayedProblems);
+    setCurrentPage(nextPage);
   };
 
   return (
@@ -56,46 +70,56 @@ const SimilarityFinder = () => {
         Search
       </button>
       {error && <p className="error-message">{error}</p>}
-      {similarProblems.length > 0 && (
-        <table className="results-table">
-          <thead>
-            <tr>
-              <th>Problem</th>
-              <th>Tags</th>
-              <th>Difficulty</th>
-              <th>Similarity Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {similarProblems.map((problem, index) => (
-              <tr key={index}>
-                <td>
-                  <a
-                    href={problem.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {problem.name}
-                  </a>
-                </td>
-                <td>
-                  {problem.tags.map((tag, tagIndex) => (
-                    <span key={tagIndex} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </td>
-                <td>
-                  <span className={`difficulty ${problem.difficulty.toLowerCase()}`}>
-                    {problem.difficulty}
-                  </span>
-                </td>
-                <td>{problem.similarity_score}</td>
+      {displayedProblems.length > 0 && (
+        <>
+          <table className="results-table">
+            <thead>
+              <tr>
+                <th>Problem</th>
+                <th>Tags</th>
+                <th>Difficulty</th>
+                <th>Similarity Score</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {displayedProblems.map((problem, index) => (
+                <tr key={index}>
+                  <td>
+                    <a
+                      href={problem.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {problem.name}
+                    </a>
+                  </td>
+                  <td>
+                    {problem.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </td>
+                  <td>
+                    <span className={`difficulty ${problem.difficulty.toLowerCase()}`}>
+                      {problem.difficulty}
+                    </span>
+                  </td>
+                  <td>{problem.similarity_score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {displayedProblems.length < similarProblems.length && (
+            <button onClick={loadMore} className="load-more-button">
+              Load More
+            </button>
+          )}
+        </>
       )}
+      <footer className="footer">
+        This project helps you find LeetCode problems similar to the one you searched for by using cosine similarity on problem vectors.
+      </footer>
     </div>
   );
 };
