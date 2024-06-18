@@ -78,8 +78,18 @@ const SimilarityFinder = () => {
                     {problem.name}
                   </a>
                 </td>
-                <td>{problem.tags.join(', ')}</td>
-                <td>{problem.difficulty}</td>
+                <td>
+                  {problem.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex} className="tag">
+                      {tag}
+                    </span>
+                  ))}
+                </td>
+                <td>
+                  <span className={`difficulty ${problem.difficulty.toLowerCase()}`}>
+                    {problem.difficulty}
+                  </span>
+                </td>
                 <td>{problem.similarity_score}</td>
               </tr>
             ))}

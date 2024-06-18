@@ -119,3 +119,42 @@ body {
 .results-table thead tr th:last-child {
   border-top-right-radius: 15px;
 }
+
+.difficulty {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-align: center;
+  font-size: small;
+  border: 1px solid #ffffff;
+}
+
+.difficulty.easy {
+  border-color: rgb(68, 239, 125);
+  color: #ffffff;
+  background-color: #173631;
+}
+
+.difficulty.medium {
+  border-color: rgb(236, 239, 68);
+  color: #ffffff;
+  background-color: #55500f;
+}
+
+.difficulty.hard {
+  border-color: rgb(239,68,68);
+  color: #ffffff;
+  background-color: #361a17;
+}
+
+
+.tag {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #23252b;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-size: 0.9em;
+}
