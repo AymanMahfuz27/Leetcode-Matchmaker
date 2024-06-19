@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})  # Update this to your frontend's URL in production
+CORS(app, resources={r"/*": {"origins": "https://leetcode-matchmaker.netlify.app"}})
 
 # Load preprocessed data
 vectors = np.load('vectors.npy')
