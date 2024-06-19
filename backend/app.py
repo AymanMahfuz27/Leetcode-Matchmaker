@@ -57,9 +57,12 @@ def similar_problems():
 
     response = jsonify(similar_problems)
     response.headers.add("Access-Control-Allow-Origin", "https://leetcode-matchmaker.netlify.app")
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
     return response
 
 
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
