@@ -23,7 +23,7 @@ const SimilarityFinder = () => {
     if (!inputValue.trim()) return;
     try {
       const response = await axios.post(
-        'http://localhost:5000/similar_problems',
+        'https://leetcode-matchmaker.herokuapp.com/similar_problems',
         { problem_name: inputValue }
       );
       setSimilarProblems(response.data);
