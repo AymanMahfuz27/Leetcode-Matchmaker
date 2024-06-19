@@ -182,3 +182,9 @@ body {
   font-size: 0.9em;
   color: #e1e1e6;
 }
+
+
+
+.results-table .left-align {
+  text-align: left;
+}

@@ -83,8 +83,8 @@ const SimilarityFinder = () => {
             </thead>
             <tbody>
               {displayedProblems.map((problem, index) => (
-                <tr key={index}>
-                  <td>
+                <tr key={index} >
+                  <td className = 'left-align'>
                     <a
                       href={problem.link}
                       target="_blank"
@@ -110,11 +110,11 @@ const SimilarityFinder = () => {
               ))}
             </tbody>
           </table>
-          {displayedProblems.length < similarProblems.length && (
+          {/* {displayedProblems.length < similarProblems.length && (
             <button onClick={loadMore} className="load-more-button">
               Load More
             </button>
-          )}
+          )} */}
         </>
       )}
       <footer className="footer">
