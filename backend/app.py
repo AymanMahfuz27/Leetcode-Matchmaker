@@ -6,7 +6,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://leetcode-matchmaker.netlify.app"}})
+CORS(app)
 
 # Load preprocessed data
 vectors = np.load('vectors.npy')
