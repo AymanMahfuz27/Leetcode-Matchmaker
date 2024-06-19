@@ -54,8 +54,12 @@ def similar_problems():
             "tags": solutions_dict[index_to_problem[i]]['tags']
         } for i in similar_indices
     ]
-    
-    return jsonify(similar_problems)
+
+    response = jsonify(similar_problems)
+    response.headers.add("Access-Control-Allow-Origin", "https://leetcode-matchmaker.netlify.app")
+    return response
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
