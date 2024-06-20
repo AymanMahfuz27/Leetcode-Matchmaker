@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import numpy as np
 import json
@@ -42,7 +42,7 @@ def similar_problems():
     similarities = cosine_similarity([vectors[problem_index]], vectors).flatten()
     
     # Get indices of top 10 most similar problems
-    similar_indices = similarities.argsort()[-211:-1][::-1]
+    similar_indices = similarities.argsort()[-11:-1][::-1]
     
     # Fetch similar problem names, their links, difficulty, and tags
     similar_problems = [
@@ -62,6 +62,15 @@ def similar_problems():
     return response
 
 
+@app.route('/')
+def serve():
+    app.logger.info('Serving index.html')
+    return send_from_directory(app.static_folder, 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    app.logger.info(f'Serving static file: {path}')
+    return send_from_directory(app.static_folder, path)
 
 
 if __name__ == '__main__':
