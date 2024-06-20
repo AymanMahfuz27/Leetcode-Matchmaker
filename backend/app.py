@@ -5,7 +5,7 @@ import json
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
 CORS(app)
 
 # Load preprocessed data
