@@ -4,15 +4,25 @@ import numpy as np
 import json
 from sklearn.metrics.pairwise import cosine_similarity
 import re
+import os 
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
 CORS(app)
 
+
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+
 # Load preprocessed data
-vectors = np.load('vectors.npy')
-with open('updated_solutions.json') as f:
+vectors_path = os.path.join(backend_dir, 'vectors.npy')
+solutions_path = os.path.join(backend_dir, 'updated_solutions.json')
+labels_path = os.path.join(backend_dir, 'kmeans_labels.npy')
+
+
+# Load preprocessed data
+vectors = np.load(vectors_path)
+with open(solutions_path) as f:
     solutions_dict = json.load(f)
-labels = np.load('kmeans_labels.npy')
+labels = np.load(labels_path)
 
 # Create a reverse mapping from vector indices to problem names
 index_to_problem = []
