@@ -188,3 +188,70 @@ body {
 .results-table .left-align {
   text-align: left;
 }
+
+/* Media Queries for Mobile Devices */
+@media only screen and (max-width: 768px) {
+  .search-bar {
+    width: 80%;
+    font-size: 0.9em;
+  }
+
+  .search-button {
+    font-size: 0.9em;
+    padding: 8px 16px;
+    margin-top: 10px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 8px;
+    font-size: 0.9em;
+  }
+
+  .title {
+    font-size: 1.5em;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    font-size: 0.8em;
+  }
+
+  .difficulty {
+    font-size: 0.8em;
+    padding: 4px 8px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .search-bar {
+    width: 100%;
+    font-size: 0.8em;
+  }
+
+  .search-button {
+    font-size: 0.8em;
+    padding: 6px 12px;
+    margin-top: 10px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 6px;
+    font-size: 0.8em;
+  }
+
+  .title {
+    font-size: 1.2em;
+  }
+
+  .tag {
+    padding: 3px 6px;
+    font-size: 0.7em;
+  }
+
+  .difficulty {
+    font-size: 0.7em;
+    padding: 3px 6px;
+  }
+}
