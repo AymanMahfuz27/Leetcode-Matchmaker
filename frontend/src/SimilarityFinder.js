@@ -81,6 +81,7 @@ const SimilarityFinder = () => {
           extremelySimilarCount={questionData.extremely_similar_count}
         />
       )}
+      <h2 className="title">Similar Problems</h2>
       {displayedProblems.length > 0 && (
         <>
           <table className="results-table">
