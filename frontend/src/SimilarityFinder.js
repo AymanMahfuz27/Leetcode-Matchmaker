@@ -49,7 +49,7 @@ const SimilarityFinder = () => {
     if (!inputValue.trim()) return;
     try {
       // http://localhost:5000/similar_problems
-      const response = await axios.post('http://localhost:5000/similar_problems', { problem_name: inputValue });
+      const response = await axios.post('/similar_problems', { problem_name: inputValue });
       console.log('Response Data:', response.data); // Log the response data to see its structure
   
       // Assuming response.data contains the expected structure
