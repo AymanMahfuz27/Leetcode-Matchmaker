@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SimilarityFinder.css';
-import QuestionCard from './QuestionCard';  // Import the new component
+import QuestionCard from './QuestionCard.js';  // Import the new component
 
 
 const SimilarityFinder = () => {
