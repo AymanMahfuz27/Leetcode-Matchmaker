@@ -1,0 +1,21 @@
+import React from 'react';
+
+const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremelySimilarCount }) => {
+  return (
+    <div className="question-card">
+      <h2>{problemName}</h2>
+      <p className="difficulty">{difficulty}</p>
+      <div className="tags">
+        {tags.map((tag, index) => (
+          <span key={index} className="tag">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <div className="question-content" dangerouslySetInnerHTML={{ __html: questionContent }} />
+      <p>Number of extremely similar questions: {extremelySimilarCount}</p>
+    </div>
+  );
+};
+
+export default QuestionCard;

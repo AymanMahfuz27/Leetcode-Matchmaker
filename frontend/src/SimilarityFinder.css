@@ -9,6 +9,45 @@ body {
   margin: 0;
   transition: padding-top 0.5s ease;
 }
+.question-card {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #2b2b2e;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  text-align: left;
+}
+
+.question-card h2 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+.question-card .difficulty {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #3b3b3e;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.question-card .tags {
+  margin-bottom: 10px;
+}
+
+.question-card .tags .tag {
+  margin-right: 5px;
+}
+
+.question-card .question-content {
+  margin-bottom: 10px;
+}
+
+.question-card p {
+  color: #e1e1e6;
+}
 
 .similarity-finder {
   text-align: center;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SimilarityFinder.css';
+import QuestionCard from './QuestionCard';  // Import the new component
+
 
 const SimilarityFinder = () => {
   const [inputValue, setInputValue] = useState('');
@@ -8,6 +10,7 @@ const SimilarityFinder = () => {
   const [displayedProblems, setDisplayedProblems] = useState([]);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [questionData, setQuestionData] = useState(null);  // New state for question data
   const problemsPerPage = 10;
 
   useEffect(() => {
@@ -25,6 +28,7 @@ const SimilarityFinder = () => {
       const response = await axios.post('/similar_problems', { problem_name: inputValue });
 
       setSimilarProblems(response.data);
+      setQuestionData(response.data);  // Set the question data
       setError('');
       setCurrentPage(1);
       setDisplayedProblems(response.data.slice(0, problemsPerPage));
@@ -68,6 +72,15 @@ const SimilarityFinder = () => {
         Search
       </button>
       {error && <p className="error-message">{error}</p>}
+      {questionData && (  // Display the question card if question data is available
+        <QuestionCard 
+          problemName={questionData.problem_name}
+          questionContent={questionData.question_content}
+          difficulty={questionData.difficulty}
+          tags={questionData.tags}
+          extremelySimilarCount={questionData.extremely_similar_count}
+        />
+      )}
       {displayedProblems.length > 0 && (
         <>
           <table className="results-table">
