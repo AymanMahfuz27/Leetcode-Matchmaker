@@ -16,7 +16,6 @@ backend_dir = os.path.dirname(os.path.abspath(__file__))
 vectors_path = os.path.join(backend_dir, 'vectors.npy')
 solutions_path = os.path.join(backend_dir, 'updated_solutions.json')
 labels_path = os.path.join(backend_dir, 'kmeans_labels.npy')
-questions_path = os.path.join(backend_dir, 'all_leetcode_questions_text.json')
 
 
 # Load preprocessed data
@@ -24,8 +23,6 @@ vectors = np.load(vectors_path)
 with open(solutions_path) as f:
     solutions_dict = json.load(f)
 labels = np.load(labels_path)
-with open(questions_path) as f:
-    questions_dict = json.load(f)
 
 # Create a reverse mapping from vector indices to problem names
 index_to_problem = []
@@ -53,11 +50,10 @@ def similar_problems():
 
     # Compute cosine similarity
     similarities = cosine_similarity([vectors[problem_index]], vectors).flatten()
-
+    
     # Get indices of top 10 most similar problems
     similar_indices = similarities.argsort()[-11:-1][::-1]
-    extremely_similar_count = sum(similarity >= 0.97 for similarity in similarities)
-
+    
     # Fetch similar problem names, their links, difficulty, and tags
     similar_problems = [
         {
@@ -69,25 +65,11 @@ def similar_problems():
         } for i in similar_indices
     ]
 
-    question_content = questions_dict.get(problem_name, '')
-
-    response_data = {
-        "problem_name": problem_name.replace('-', ' ').title(),
-        "question_content": question_content,
-        "difficulty": solutions_dict[problem_name]['difficulty'],
-        "tags": solutions_dict[problem_name]['tags'],
-        "extremely_similar_count": extremely_similar_count,
-        "similar_problems": similar_problems
-    }
-
-    response = jsonify(response_data)
+    response = jsonify(similar_problems)
     response.headers.add("Access-Control-Allow-Origin", "https://leetcode-matchmaker.netlify.app")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type")
     response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
     return response
-
-
-    
 
 
 @app.route('/')
