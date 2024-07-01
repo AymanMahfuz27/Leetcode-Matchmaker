@@ -53,7 +53,7 @@ def similar_problems():
 
     # Compute cosine similarity
     similarities = cosine_similarity([vectors[problem_index]], vectors).flatten()
-    
+
     # Get indices of top 10 most similar problems
     similar_indices = similarities.argsort()[-11:-1][::-1]
     extremely_similar_count = sum(similarity >= 0.97 for similarity in similarities)
@@ -68,23 +68,26 @@ def similar_problems():
             "tags": solutions_dict[index_to_problem[i]]['tags']
         } for i in similar_indices
     ]
+
     question_content = questions_dict.get(problem_name, '')
 
-
     response_data = {
-            "problem_name": problem_name.replace('-', ' ').title(),
-            "question_content": question_content,
-            "difficulty": solutions_dict[problem_name]['difficulty'],
-            "tags": solutions_dict[problem_name]['tags'],
-            "extremely_similar_count": extremely_similar_count,
-            "similar_problems": similar_problems
-        }
+        "problem_name": problem_name.replace('-', ' ').title(),
+        "question_content": question_content,
+        "difficulty": solutions_dict[problem_name]['difficulty'],
+        "tags": solutions_dict[problem_name]['tags'],
+        "extremely_similar_count": extremely_similar_count,
+        "similar_problems": similar_problems
+    }
 
     response = jsonify(response_data)
     response.headers.add("Access-Control-Allow-Origin", "https://leetcode-matchmaker.netlify.app")
     response.headers.add("Access-Control-Allow-Headers", "Content-Type")
     response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
     return response
+
+
+    
 
 
 @app.route('/')

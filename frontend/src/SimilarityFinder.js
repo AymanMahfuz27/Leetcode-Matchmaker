@@ -9,7 +9,7 @@ const SimilarityFinder = () => {
   const [similarProblems, setSimilarProblems] = useState([]);
   const [displayedProblems, setDisplayedProblems] = useState([]);
   const [error, setError] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [questionData, setQuestionData] = useState(null);  // New state for question data
   const problemsPerPage = 10;
 
@@ -22,16 +22,46 @@ const SimilarityFinder = () => {
     }
   }, [similarProblems]);
 
+  // const handleSearch = async () => {
+  //   if (!inputValue.trim()) return;
+  //   try {
+  //     const response = await axios.post('/similar_problems', { problem_name: inputValue });
+
+  //     setSimilarProblems(response.data);
+  //     setQuestionData(response.data);  // Set the question data
+  //     setError('');
+  //     setCurrentPage(1);
+  //     setDisplayedProblems(response.data.slice(0, problemsPerPage));
+  //   } catch (error) {
+  //     console.error('Error fetching similar problems', error);
+  //     if (error.response) {
+  //       setError(error.response.data.error);
+  //     } else {
+  //       setError('Error fetching similar problems');
+  //     }
+  //     setSimilarProblems([]);
+  //     setDisplayedProblems([]);
+  //   }
+  // };
+
+
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
     try {
       const response = await axios.post('/similar_problems', { problem_name: inputValue });
-
-      setSimilarProblems(response.data);
-      setQuestionData(response.data);  // Set the question data
+      console.log('Response Data:', response.data); // Log the response data to see its structure
+  
+      // Assuming response.data contains the expected structure
+      setSimilarProblems(response.data.similar_problems);
+      setQuestionData({
+        problem_name: response.data.problem_name,
+        question_content: response.data.question_content,
+        difficulty: response.data.difficulty,
+        tags: response.data.tags,
+        extremely_similar_count: response.data.extremely_similar_count,
+      });  // Set the question data
       setError('');
-      setCurrentPage(1);
-      setDisplayedProblems(response.data.slice(0, problemsPerPage));
+      // setCurrentPage(1);
     } catch (error) {
       console.error('Error fetching similar problems', error);
       if (error.response) {
@@ -43,6 +73,7 @@ const SimilarityFinder = () => {
       setDisplayedProblems([]);
     }
   };
+  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -50,12 +81,12 @@ const SimilarityFinder = () => {
     }
   };
 
-  const loadMore = () => {
-    const nextPage = currentPage + 1;
-    const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
-    setDisplayedProblems(newDisplayedProblems);
-    setCurrentPage(nextPage);
-  };
+  // const loadMore = () => {
+  //   const nextPage = currentPage + 1;
+  //   const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
+  //   setDisplayedProblems(newDisplayedProblems);
+  //   setCurrentPage(nextPage);
+  // };
 
   return (
     <div className="similarity-finder">
@@ -81,7 +112,7 @@ const SimilarityFinder = () => {
           extremelySimilarCount={questionData.extremely_similar_count}
         />
       )}
-      <h2 className="title">Similar Problems</h2>
+      {/* <h2 className="title">Similar Problems</h2> */}
       {displayedProblems.length > 0 && (
         <>
           <table className="results-table">
