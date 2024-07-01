@@ -25,7 +25,7 @@ with open(solutions_path) as f:
     solutions_dict = json.load(f)
 labels = np.load(labels_path)
 with open(questions_path) as f:
-    questions_data = json.load(f)
+    questions_dict = json.load(f)
 
 # Create a reverse mapping from vector indices to problem names
 index_to_problem = []
@@ -68,7 +68,7 @@ def similar_problems():
             "tags": solutions_dict[index_to_problem[i]]['tags']
         } for i in similar_indices
     ]
-    question_content = next((item['question_content'] for item in questions_data if item['titleSlug'] == problem_name), '')
+    question_content = questions_dict.get(problem_name, '')
 
 
     response_data = {
