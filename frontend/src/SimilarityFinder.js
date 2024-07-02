@@ -92,7 +92,7 @@ const SimilarityFinder = () => {
   // };
 
   return (
-    <div className="container">
+    <div className={`container ${!questionData ? 'centered-container' : ''}`}>
       <h1 className="title">LeetCode Problem Similarity Finder</h1>
       <div className="search-container">
         <input
@@ -119,7 +119,9 @@ const SimilarityFinder = () => {
           />
         )}
         {displayedProblems.length > 0 && (
+          <>
           <table className="results-table">
+            <caption>Similar Problems</caption>
             <thead>
               <tr>
                 <th>Problem</th>
@@ -157,6 +159,7 @@ const SimilarityFinder = () => {
               ))}
             </tbody>
           </table>
+          </>
         )}
       </div>
       <footer className="footer">
