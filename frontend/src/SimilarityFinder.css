@@ -2,22 +2,61 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: #1c1d1f;
   color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
   transition: padding-top 0.5s ease;
+  overflow: auto;  /* Allow scrolling */
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.similarity-finder {
+  display: grid;
+  grid-template-columns: 470px 1.37fr;  /* Two-column layout */
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .similarity-finder {
+    grid-template-columns: 1fr;  /* Single-column layout on smaller screens */
+  }
+}
+
 .question-card {
-  margin: 20px auto;
   padding: 20px;
   background-color: #2b2b2e;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 80%;
-  text-align: left;
+  word-wrap: break-word; /* Ensure content wraps */
+  overflow-wrap: break-word; /* Ensure content wraps */
+  word-break: break-word; /* Ensure content wraps */
+
 }
+.question-card pre {
+  white-space: pre-wrap; /* Ensure preformatted text wraps */
+  word-wrap: break-word; /* Ensure preformatted text wraps */
+  overflow-wrap: break-word; /* Ensure preformatted text wraps */
+  background-color: #24262c; /* Match the table color */
+  color: #e1e1e6; /* Text color */
+  padding: 15px; /* Padding to look like a code block */
+  border-radius: 10px; /* Rounded corners */
+  border: 1px solid #353741; /* Border similar to the table */
+  overflow: auto; /* Allow scrolling for long code */
+
+}
+
+.question-card a{
+  color: #3b82f6;
+
+}
+
 
 .question-card h2 {
   margin-top: 0;
@@ -49,19 +88,73 @@ body {
   color: #e1e1e6;
 }
 
-.similarity-finder {
-  text-align: center;
-  transition: transform 0.5s ease, padding-top 0.5s ease;
-}
-
 .title {
   font-size: 2em;
   margin-bottom: 20px;
   color: #ffffff;
+  grid-column: 1 / -1;  /* Span both columns */
 }
 
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  grid-column: 1 / -1;  /* Span both columns */
+}
+
+.extremely-similar-count {
+  word-wrap: break-word; /* Ensure content wraps */
+  word-break: break-word; /* Ensure content wraps */
+  color: gold;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+}
+
+.extremely-similar-count .tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.extremely-similar-count .tooltip .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position above the icon */
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.extremely-similar-count .tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.extremely-similar-count .tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 .search-bar {
-  width: 50%;
+  width: 400px;
   padding: 10px;
   font-size: 1em;
   border: 1px solid #ffffff;
@@ -95,11 +188,12 @@ body {
 .error-message {
   color: red;
   margin-top: 20px;
+  grid-column: 1 / -1;  /* Span both columns */
 }
 
 .results-table {
-  width: 80%;
-  margin: 40px auto;
+  width: 100%;
+  margin: 0 auto;
   border-collapse: collapse;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -186,7 +280,6 @@ body {
   background-color: #361a17;
 }
 
-
 .tag {
   display: inline-block;
   padding: 5px 10px;
@@ -196,9 +289,7 @@ body {
   margin-bottom: 5px;
   color: #ffffff;
   font-size: 0.9em;
-
 }
-
 
 .load-more-button {
   margin: 20px auto;
@@ -220,9 +311,8 @@ body {
   margin-top: 20px;
   font-size: 0.9em;
   color: #e1e1e6;
+  grid-column: 1 / -1;  /* Span both columns */
 }
-
-
 
 .results-table .left-align {
   text-align: left;

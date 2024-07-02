@@ -1,13 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SimilarityFinder.css';
+const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremelySimilarCount }) => {
+  return (
+    <div className="question-card">
+      <h2>{problemName}</h2>
+      <div className="extremely-similar-count">
+        <span>Number of extremely similar questions: <strong><u>{extremelySimilarCount}</u></strong></span>
+        <div className="tooltip">
+          <span>ℹ️</span>
+          <div className="tooltiptext">
+            The count of extremely similar questions is determined based on a cosine similarity score of 0.97 or higher.
+          </div>
+        </div>
+      </div>
+      <p className={`difficulty ${difficulty.toLowerCase()}`}>{difficulty}</p>
+      <div className="tags">
+        {tags.map((tag, index) => (
+          <span key={index} className="tag">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <div className="question-content" dangerouslySetInnerHTML={{ __html: questionContent }} />
+    </div>
+  );
+};
+
+
 
 const SimilarityFinder = () => {
   const [inputValue, setInputValue] = useState('');
   const [similarProblems, setSimilarProblems] = useState([]);
   const [displayedProblems, setDisplayedProblems] = useState([]);
   const [error, setError] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [questionData, setQuestionData] = useState(null);  // New state for question data
   const problemsPerPage = 10;
 
   useEffect(() => {
@@ -19,15 +46,25 @@ const SimilarityFinder = () => {
     }
   }, [similarProblems]);
 
+
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
     try {
+      // http://localhost:5000/similar_problems
       const response = await axios.post('/similar_problems', { problem_name: inputValue });
-
-      setSimilarProblems(response.data);
+      console.log('Response Data:', response.data); // Log the response data to see its structure
+  
+      // Assuming response.data contains the expected structure
+      setSimilarProblems(response.data.similar_problems);
+      setQuestionData({
+        problem_name: response.data.problem_name,
+        question_content: response.data.question_content,
+        difficulty: response.data.difficulty,
+        tags: response.data.tags,
+        extremely_similar_count: response.data.extremely_similar_count,
+      });  // Set the question data
       setError('');
-      setCurrentPage(1);
-      setDisplayedProblems(response.data.slice(0, problemsPerPage));
+      // setCurrentPage(1);
     } catch (error) {
       console.error('Error fetching similar problems', error);
       if (error.response) {
@@ -39,6 +76,7 @@ const SimilarityFinder = () => {
       setDisplayedProblems([]);
     }
   };
+  
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -46,30 +84,41 @@ const SimilarityFinder = () => {
     }
   };
 
-  const loadMore = () => {
-    const nextPage = currentPage + 1;
-    const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
-    setDisplayedProblems(newDisplayedProblems);
-    setCurrentPage(nextPage);
-  };
+  // const loadMore = () => {
+  //   const nextPage = currentPage + 1;
+  //   const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
+  //   setDisplayedProblems(newDisplayedProblems);
+  //   setCurrentPage(nextPage);
+  // };
 
   return (
-    <div className="similarity-finder">
+    <div className="container">
       <h1 className="title">LeetCode Problem Similarity Finder</h1>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Enter LeetCode problem name or URL"
-        onKeyPress={handleKeyPress}
-        className="search-bar"
-      />
-      <button onClick={handleSearch} className="search-button">
-        Search
-      </button>
+      <div className="search-container">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Enter LeetCode problem name or URL"
+          onKeyPress={handleKeyPress}
+          className="search-bar"
+        />
+        <button onClick={handleSearch} className="search-button">
+          Search
+        </button>
+      </div>
       {error && <p className="error-message">{error}</p>}
-      {displayedProblems.length > 0 && (
-        <>
+      <div className="similarity-finder">
+        {questionData && (
+          <QuestionCard
+            problemName={questionData.problem_name}
+            questionContent={questionData.question_content}
+            difficulty={questionData.difficulty}
+            tags={questionData.tags}
+            extremelySimilarCount={questionData.extremely_similar_count}
+          />
+        )}
+        {displayedProblems.length > 0 && (
           <table className="results-table">
             <thead>
               <tr>
@@ -81,8 +130,8 @@ const SimilarityFinder = () => {
             </thead>
             <tbody>
               {displayedProblems.map((problem, index) => (
-                <tr key={index} >
-                  <td className = 'left-align'>
+                <tr key={index}>
+                  <td className='left-align'>
                     <a
                       href={problem.link}
                       target="_blank"
@@ -108,18 +157,14 @@ const SimilarityFinder = () => {
               ))}
             </tbody>
           </table>
-          {/* {displayedProblems.length < similarProblems.length && (
-            <button onClick={loadMore} className="load-more-button">
-              Load More
-            </button>
-          )} */}
-        </>
-      )}
+        )}
+      </div>
       <footer className="footer">
         This project helps you find LeetCode problems similar to the one you searched for by using cosine similarity on problem vectors.
       </footer>
     </div>
   );
 };
+
 
 export default SimilarityFinder;
