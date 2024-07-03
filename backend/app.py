@@ -9,8 +9,6 @@ import logging
 import traceback
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
-# CORS(app)
-# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 CORS(app, resources={r"/similar_problems": {"origins": "*"}})
 
 
@@ -68,7 +66,8 @@ def similar_problems():
 
         # Get indices of top 10 most similar problems
         similar_indices = similarities.argsort()[-11:-1][::-1]
-        extremely_similar_count = sum(similarity >= 0.97 for similarity in similarities)
+        unique_problems = {index_to_problem[i] for i, similarity in enumerate(similarities) if similarity >= 0.99}
+        extremely_similar_count = len(unique_problems)
 
         # Fetch similar problem names, their links, difficulty, and tags
         similar_problems = [

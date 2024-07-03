@@ -10,7 +10,7 @@ const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremel
         <div className="tooltip">
           <span>ℹ️</span>
           <div className="tooltiptext">
-            The count of extremely similar questions is determined based on a cosine similarity score of 0.97 or higher.
+            The count of extremely similar questions is determined based on a cosine similarity score of 0.99 or higher.
           </div>
         </div>
       </div>
