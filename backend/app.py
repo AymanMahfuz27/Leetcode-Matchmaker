@@ -3,6 +3,7 @@ from flask_cors import CORS
 import numpy as np
 import json
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MinMaxScaler
 import re
 import os 
 import logging 
@@ -63,9 +64,13 @@ def similar_problems():
 
         # Compute cosine similarity
         similarities = cosine_similarity([vectors[problem_index]], vectors).flatten()
+        scaler = MinMaxScaler()
+        normalized_similarities = scaler.fit_transform(similarities.reshape(-1, 1)).flatten()
 
         # Get indices of top 10 most similar problems
-        similar_indices = similarities.argsort()[-11:-1][::-1]
+        similar_indices = normalized_similarities.argsort()[-11:-1][::-1]
+
+        # Calculate the number of unique problems with similarity >= 0.97
         unique_problems = {index_to_problem[i] for i, similarity in enumerate(similarities) if similarity >= 0.99}
         extremely_similar_count = len(unique_problems)
 
@@ -91,15 +96,7 @@ def similar_problems():
             "similar_problems": similar_problems
         }
 
-        # logger.info(f'Response data: {response_data}')
-        # for key, value in response_data.items():
-        #     data_type = str(type(value))
-        #     logger.info(f'{key} Datatype: {data_type}')
-        
         response = jsonify(response_data)
-        # response.headers.add("Access-Control-Allow-Origin", "https://leetcode-matchmaker.netlify.app")
-        # response.headers.add("Access-Control-Allow-Headers", "Content-Type")
-        # response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
         return response
     except Exception as e:
         logger.error(f"Error in /similar_problems: {str(e)}")
