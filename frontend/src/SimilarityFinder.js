@@ -50,7 +50,7 @@ const SimilarityFinder = () => {
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
     try {
-      const response = await axios.post(`${API_URL}/api/similar_problems`, { problem_name: inputValue });
+      const response = await axios.post('/api/similar_problems', { problem_name: inputValue });
       console.log('Response Data:', response.data);
   
       setSimilarProblems(response.data.similar_problems);
