@@ -10,7 +10,16 @@ import logging
 import traceback
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS to only allow requests from your Vercel frontend
+ALLOWED_ORIGINS = os.environ.get('ALLOWED_ORIGINS', 'http://localhost:3000').split(',')
+CORS(app, resources={
+    r"/*": {  # Changed from /api/* to /* to allow all routes
+        "origins": ALLOWED_ORIGINS,
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -101,10 +110,22 @@ def similar_problems():
         logger.error(traceback.format_exc())
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
-# Add a health check endpoint
-@app.route('/api/health', methods=['GET'])
-def health_check():
-    return jsonify({"status": "healthy"}), 200
+# Add root route handler
+@app.route('/')
+def root():
+    return jsonify({
+        "status": "online",
+        "message": "Leetcode Matchmaker API is running",
+        "endpoints": {
+            "/api/similar_problems": "POST - Find similar Leetcode problems",
+            "/api/health": "GET - Health check"
+        }
+    })
+
+# Add health check endpoint
+@app.route('/api/health')
+def health():
+    return jsonify({"status": "healthy"})
 
 # Required for Vercel
 app.debug = True
