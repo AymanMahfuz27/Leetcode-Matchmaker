@@ -1,8 +1,10 @@
 {
   "name": "leetcode-matchmaker",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd frontend && npm start"
   },
   "dependencies": {}
 }
