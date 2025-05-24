@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SimilarityFinder.css';
+
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremelySimilarCount }) => {
   return (
     <div className="question-card">
@@ -27,8 +30,6 @@ const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremel
   );
 };
 
-
-
 const SimilarityFinder = () => {
   const [inputValue, setInputValue] = useState('');
   const [similarProblems, setSimilarProblems] = useState([]);
@@ -46,11 +47,10 @@ const SimilarityFinder = () => {
     }
   }, [similarProblems]);
 
-
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
     try {
-      const response = await axios.post('/api/similar_problems', { problem_name: inputValue });
+      const response = await axios.post(`${API_URL}/api/similar_problems`, { problem_name: inputValue });
       console.log('Response Data:', response.data);
   
       setSimilarProblems(response.data.similar_problems);
@@ -74,7 +74,6 @@ const SimilarityFinder = () => {
     }
   };
   
-
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleSearch();
@@ -165,6 +164,5 @@ const SimilarityFinder = () => {
     </div>
   );
 };
-
 
 export default SimilarityFinder;
