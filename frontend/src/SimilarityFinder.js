@@ -50,11 +50,9 @@ const SimilarityFinder = () => {
   const handleSearch = async () => {
     if (!inputValue.trim()) return;
     try {
-      // http://localhost:5000/similar_problems
-      const response = await axios.post('/similar_problems', { problem_name: inputValue });
-      console.log('Response Data:', response.data); // Log the response data to see its structure
+      const response = await axios.post('/api/similar_problems', { problem_name: inputValue });
+      console.log('Response Data:', response.data);
   
-      // Assuming response.data contains the expected structure
       setSimilarProblems(response.data.similar_problems);
       setQuestionData({
         problem_name: response.data.problem_name,
@@ -62,9 +60,8 @@ const SimilarityFinder = () => {
         difficulty: response.data.difficulty,
         tags: response.data.tags,
         extremely_similar_count: response.data.extremely_similar_count,
-      });  // Set the question data
+      });
       setError('');
-      // setCurrentPage(1);
     } catch (error) {
       console.error('Error fetching similar problems', error);
       if (error.response) {

@@ -9,9 +9,8 @@ import os
 import logging 
 import traceback
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='')
-CORS(app, resources={r"/similar_problems": {"origins": "*"}})
-
+app = Flask(__name__)
+CORS(app)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,7 +22,6 @@ vectors_path = os.path.join(backend_dir, 'vectors.npy')
 solutions_path = os.path.join(backend_dir, 'updated_solutions.json')
 labels_path = os.path.join(backend_dir, 'kmeans_labels.npy')
 questions_path = os.path.join(backend_dir, 'all_leetcode_questions_text.json')
-
 
 # Load preprocessed data
 vectors = np.load(vectors_path)
@@ -45,7 +43,7 @@ def extract_problem_name(input_str):
         return match.group(1)
     return input_str.replace(' ', '-').lower()
 
-@app.route('/similar_problems', methods=['POST'])
+@app.route('/api/similar_problems', methods=['POST'])
 def similar_problems():
     try:
         data = request.json
@@ -103,20 +101,13 @@ def similar_problems():
         logger.error(traceback.format_exc())
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
+# Add a health check endpoint
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy"}), 200
 
-    
-
-
-@app.route('/')
-def serve():
-    app.logger.info('Serving index.html')
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:path>')
-def serve_static(path):
-    app.logger.info(f'Serving static file: {path}')
-    return send_from_directory(app.static_folder, path)
-
+# Required for Vercel
+app.debug = True
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
