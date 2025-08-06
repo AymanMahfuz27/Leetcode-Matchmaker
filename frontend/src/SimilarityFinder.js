@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SimilarityFinder.css';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 'https://leetcode-matchmaker-2bb8b1daa393.herokuapp.com';
 
 const QuestionCard = ({ problemName, questionContent, difficulty, tags, extremelySimilarCount }) => {
   return (
@@ -80,6 +80,15 @@ const SimilarityFinder = () => {
     }
   };
 
+  const getSimilarityCategory = (score) => {
+    const s = parseFloat(score);
+    if (s >= 95) return 'Extremely Similar';
+    if (s >= 85) return 'Very Similar';
+    if (s >= 70) return 'Similar';
+    if (s >= 50) return 'Somewhat Similar';
+    return 'Less Similar';
+  };
+
   // const loadMore = () => {
   //   const nextPage = currentPage + 1;
   //   const newDisplayedProblems = similarProblems.slice(0, problemsPerPage * nextPage);
@@ -150,7 +159,7 @@ const SimilarityFinder = () => {
                       {problem.difficulty}
                     </span>
                   </td>
-                  <td>{problem.similarity_score}</td>
+                  <td>{problem.similarity_score}% ({getSimilarityCategory(problem.similarity_score)})</td>
                 </tr>
               ))}
             </tbody>

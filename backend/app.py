@@ -86,7 +86,7 @@ def similar_problems():
             {
                 "name": index_to_problem[i].replace('-', ' ').title(),
                 "link": f"https://leetcode.com/problems/{index_to_problem[i]}/",
-                "similarity_score": f'{str(similarities[i])[0:5]}',
+                "similarity_score": round(float(normalized_similarities[i] * 100), 2),
                 "difficulty": solutions_dict[index_to_problem[i]]['difficulty'],
                 "tags": solutions_dict[index_to_problem[i]]['tags']
             } for i in similar_indices
